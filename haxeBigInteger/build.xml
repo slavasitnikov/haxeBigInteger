@@ -1,0 +1,65 @@
+
+<project name="TDD_sandbox">
+
+    <property environment="env"/>
+
+    <property name="main.src.loc" location="${basedir}/src/" />
+    <property name="main.name" value="Main.hx" />
+    <property name="test.src.loc" location="${basedir}/test/" />
+    <property name="test.report.loc" location="${basedir}/report/" />
+    <property name="export.loc" location="${basedir}/export/" />
+    <property name="bin.name" value="TDDSandbox.swf" />
+
+    <target name="init">
+        <mkdir dir="${export.loc}"/>
+        <mkdir dir="${test.report.loc}"/>
+    </target>
+
+    <target name="build" depends="init">
+        <exec executable="haxelib" failonerror="true">
+            <arg line="run"/>
+            <arg line="openfl"/>
+            <arg line="build"/>
+            <arg line="flash"/>
+        </exec>
+    </target>
+
+    <target name="test" depends="init">
+        <exec executable="haxelib" failonerror="true">
+            <arg line="run"/>
+            <arg line="openfl"/>
+            <arg line="update"/>
+            <arg line="test.xml"/>
+            <arg line="flash"/>
+        </exec>
+        <exec executable="haxelib" failonerror="true">
+            <arg line="run"/>
+            <arg line="munit"/>
+            <arg line="test"/>
+            <arg line="test.hxml"/>
+        </exec>
+    </target>
+
+    <target name="testDebug" depends="init">
+        <exec executable="haxelib" failonerror="true">
+            <arg line="run"/>
+            <arg line="openfl"/>
+            <arg line="update"/>
+            <arg line="test.xml"/>
+            <arg line="flash"/>
+        </exec>
+        <exec executable="haxelib" failonerror="true">
+            <arg line="run"/>
+            <arg line="munit"/>
+            <arg line="test"/>
+            <arg line="test.hxml"/>
+            <arg line="-D"/>
+        </exec>
+    </target>
+
+    <target name="clean">
+        <delete dir="${export.loc}" />
+        <delete dir="${test.report.loc}" />
+    </target>
+
+</project>

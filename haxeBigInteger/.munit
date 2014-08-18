@@ -1,0 +1,5 @@
+version=2.1.0
+src=test
+bin=export/test/
+report=report
+classPaths=src

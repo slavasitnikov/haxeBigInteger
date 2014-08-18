@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project>
+	
+	<meta title="haxeBigInteger-Test" package="com.example.haxebiginteger" version="1.0.0" company="NoName" />
+	<app main="Main" path="export/test" file="HaxeBigInteger" />
+	
+	<source path="test" />
+
+	<include path="common.xml"/>
+	<haxelib name="munit" version = "2.1.0" />
+
+</project>
