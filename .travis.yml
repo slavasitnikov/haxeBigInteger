@@ -10,6 +10,7 @@ before_install:
 
 install:
   - sudo apt-get install haxe -y --force-yes
+  - sudo apt-get install ant -y --force-yes
   - sudo apt-get install g++-multilib gcc-multilib
   - sudo apt-get install mesa-common-dev libgl1-mesa-dev libglu1-mesa-dev -y
   - mkdir ~/haxelib
@@ -29,7 +30,6 @@ install:
   - haxelib install mlib
   - haxelib install mcover
   - haxelib install hamcrest
-  - ant tools
   - git clone https://github.com/jgranick/MassiveUnit ~/munit --depth 1
   - haxelib dev munit ~/munit/src
   - haxelib dev openfl $(pwd)
