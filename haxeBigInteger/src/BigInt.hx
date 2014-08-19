@@ -90,7 +90,12 @@ abstract BigInt(_BigInt){
 		return val.sign > 0;
 	}
 
-//	@:op(-A) function _neg():BigInt;
+	@:op(-A) function _neg():BigInt{
+		var res:BigInt = new BigInt();
+		res.val.sign = -val.sign;
+		res.val.bits = val.bits;
+		return res;
+	}
 
 //	@:op(++A) function _preIncrement():BigInt;
 //	@:op(A++) function _postIncrement():BigInt;
@@ -151,7 +156,7 @@ abstract BigInt(_BigInt){
 	}
 
 	@:op(A == B) @:commutative static function eqInt(a:BigInt, b:Int):Bool{
-		if(b != MIN_INT_32){
+		if(b == MIN_INT_32){
 			return a.val.sign == -1 && a.val.bits.length == 1 && a.val.bits[0] == cast MIN_INT_32;
 		}else{
 			return a.val.bits == null && a.val.sign == b;
@@ -161,8 +166,13 @@ abstract BigInt(_BigInt){
 //	@:op(A == B) @:commutative static function eqUInt(a:BigInt, b:UInt):Bool;
 //	@:op(A == B) @:commutative static function eqString(a:BigInt, b:String):Bool;
 
-//	@:op(A != B) static function neq(a:BigInt, b:BigInt):Bool;
-//	@:op(A != B) @:commutative static function neqInt(a:BigInt, b:Int):Bool;
+	@:op(A != B) static function neq(a:BigInt, b:BigInt):Bool{
+		return !(a == b);
+	}
+
+	@:op(A != B) @:commutative static function neqInt(a:BigInt, b:Int):Bool{
+		return !(a == b);
+	}
 //	@:op(A != B) @:commutative static function neqUInt(a:BigInt, b:UInt):Bool;
 //	@:op(A != B) @:commutative static function neqString(a:BigInt, b:String):Bool;
 

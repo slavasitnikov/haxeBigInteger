@@ -71,4 +71,13 @@ class BigIntTest{
 		Assert.isTrue(BigInt.fromInt(MIN_INT) == BigInt.fromInt(MIN_INT));
 	}
 
+	/**
+	*   @:op(-A)
+	**/
+	@Test
+	public function negBigInt():Void {
+		var b:BigInt = 2000;
+		Assert.isTrue(BigInt.fromInt(-2000) == -b);
+	}
+
 }
