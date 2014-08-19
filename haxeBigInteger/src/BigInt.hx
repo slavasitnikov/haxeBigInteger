@@ -7,7 +7,7 @@ package ;
 *   _sign = i;
 *   _bits = null;
 *
-*   for e.g.
+*   e.g.
 *   fromInt(23) -> {sign:23, bits:null}
 *
 *   bits in big-endian order
@@ -17,6 +17,7 @@ abstract BigInt(_BigInt){
 	static inline var MAX_INT_32:Int = (1 << 31) - 1;
 	static inline var MASK_HIGH_BIT_INT = MIN_INT_32;
 	static inline var CHUNK_BIT = 32;
+	static inline var STRING_BASE = 10;
 
 	var val(get, never):_BigInt;
 	function get_val():_BigInt{ return this; }
@@ -54,10 +55,12 @@ abstract BigInt(_BigInt){
 
 		return res;
 	}
-
-//	@:from
-//	public static function fromString(value:String):BigInt;
 //
+//	@:from
+//	public static function fromString(value:String):BigInt{
+//
+//	}
+
 
 	@:to
 	public function toString():String{
@@ -94,8 +97,15 @@ abstract BigInt(_BigInt){
 //	@:op(--A) function _preDecrement():BigInt;
 //	@:op(A--) function _postDecrement():BigInt;
 
-//	@:op(A + B) static function add(a:BigInt, b:BigInt):BigInt;
-//	@:op(A + B) @:commutative static function addInt(a:BigInt, b:Int):BigInt;
+//	@:op(A + B) static function add(a:BigInt, b:BigInt):BigInt{
+//		var res:BigInt = new BigInt();
+//		return res;
+//	}
+
+//	@:op(A + B) @:commutative static function addInt(a:BigInt, b:Int):BigInt{
+//		var res:BigInt = new BigInt();
+//		return res;
+//	}
 //	@:op(A + B) @:commutative static function addUInt(a:BigInt, b:UInt):BigInt;
 //	@:op(A + B) @:commutative static function addString(a:BigInt, b:String):BigInt;
 
@@ -128,8 +138,26 @@ abstract BigInt(_BigInt){
 //	@:op(A % B) static function modString(a:BigInt, b:String):BigInt;
 //	@:op(A % B) static function stringMod(a:String, b:BigInt):BigInt;
 
-//	@:op(A == B) static function eq(a:BigInt, b:BigInt):Bool;
-//	@:op(A == B) @:commutative static function eqInt(a:BigInt, b:Int):Bool;
+	@:op(A == B) static function eq(a:BigInt, b:BigInt):Bool{
+		if(a.isZero() && b.isZero()) return true;
+		if(a.val.bits == null && b.val.bits == null) return a.val.sign == b.val.sign;
+		if(a.val.bits == null && b.val.bits != null || a.val.bits != null && b.val.bits == null) return false;
+		if(a.val.sign != b.val.sign) return false;
+		if(a.val.bits.length != b.val.bits.length) return false;
+		for(i in 0...a.val.bits.length){
+			if(a.val.bits[i] != b.val.bits[i]) return false;
+		}
+		return true;
+	}
+
+	@:op(A == B) @:commutative static function eqInt(a:BigInt, b:Int):Bool{
+		if(b != MIN_INT_32){
+			return a.val.sign == -1 && a.val.bits.length == 1 && a.val.bits[0] == cast MIN_INT_32;
+		}else{
+			return a.val.bits == null && a.val.sign == b;
+		}
+	}
+
 //	@:op(A == B) @:commutative static function eqUInt(a:BigInt, b:UInt):Bool;
 //	@:op(A == B) @:commutative static function eqString(a:BigInt, b:String):Bool;
 
