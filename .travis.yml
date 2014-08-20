@@ -1,10 +1,14 @@
 language: java
 
 install:
+  - sudo add-apt-repository ppa:eyecreate/haxe -y
+  - sudo apt-get update
   - sudo apt-get install haxe -y --force-yes
   - sudo apt-get install ant -y --force-yes
   - mkdir ~/haxelib
   - haxelib setup ~/haxelib
+  - haxelib install lime
+  - haxelib install lime-tools
   - haxelib install openfl
   - haxelib install hxcpp
   - haxelib install format
