@@ -26,4 +26,6 @@ before_script:
 script:
   - ant clean
   - ant build
-  - ant test
+#  - ant test
+- haxelib run munit test -as3 -norun
+- haxelib run munit test -browser phantomjs
