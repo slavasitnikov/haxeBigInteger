@@ -6,4 +6,4 @@
 
 -cp test
 -swf-version 11
--swf export/flash/bin/TDDSandbox.swf
+-swf export/flash/bin/haxeBigInteger.swf
