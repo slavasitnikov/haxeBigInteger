@@ -1,8 +1,9 @@
 package ;
 
-//TODO check platforms
+//TODO check platforms Int or Int32
 //TODO add Float like 1e10;
 /**
+*   TODO IN FUTURE
 *   i:Int optimization:
 *   _sign = i;
 *   _bits = null;
@@ -10,34 +11,40 @@ package ;
 *   e.g.
 *   fromInt(23) -> {sign:23, bits:null}
 *
-*   bits in big-endian order
 **/
+//TODO USE CHUNCK_BIT 30 or 32
+
 abstract BigInt(_BigInt){
 	static inline var MIN_INT_32:Int = -1 * (1 << 31);
 	static inline var MAX_INT_32:Int = (1 << 31) - 1;
-	static inline var MASK_HIGH_BIT_INT = MIN_INT_32;
-	static inline var CHUNK_BIT = 32;
-	static inline var STRING_BASE = 10;
+	static inline var CHUNK_BITS:Int = 15;
+	static inline var MASK:UInt = (1 << CHUNK_BITS) - 1;
+	static inline var STRING_BASE:Int = 10;
 
 	var val(get, never):_BigInt;
 	function get_val():_BigInt{ return this; }
 
 	inline public function new():_BigInt{
-		this = {sign:0, bits:null};
+		this = {sign:0, bits:[]};
 	}
 
 	@:from
 	public static function fromInt(value:Int):BigInt{
 		var res:BigInt = new BigInt();
+		var valueU:UInt = cast value;
 
-		if(value == MIN_INT_32){
+		if(value < 0){
 			res.val.sign = -1;
-			res.val.bits = [cast MIN_INT_32];
+		}else if(value > 0){
+			res.val.sign = 1;
 		}else{
-			res.val.sign = value;
-			res.val.bits = null;
+			return res;
 		}
 
+		while(valueU != 0){
+			res.val.bits.push(valueU & MASK);
+			valueU >>>= CHUNK_BITS;
+		}
 		return res;
 	}
 
@@ -45,14 +52,14 @@ abstract BigInt(_BigInt){
 	public static function fromUInt(value:UInt):BigInt{
 		var res:BigInt = new BigInt();
 
-		if(value <= cast(MAX_INT_32, UInt)){
-			res.val.sign = cast value;
-			res.val.bits = null;
-		}else{
-			res.val.sign = 1;
-			res.val.bits = [value];
+		if(value == 0){
+			return res;
 		}
 
+		while(value != 0){
+			res.val.bits.push(value & MASK);
+			value >>>= CHUNK_BITS;
+		}
 		return res;
 	}
 //
@@ -62,25 +69,21 @@ abstract BigInt(_BigInt){
 //	}
 
 
-	@:to
-	public function toString():String{
-		if(isZero()){
-			return "0";
-		}
-		else if(val.bits == null){
-			return Std.string(val.sign);
-		}else{
-			var res:String = (isNeg() ? "-" : "");
-			for(i in 0...val.bits.length){
-				res += Std.string(val.bits[i]);
-			}
-			return res;
-		}
-	}
+//	@:to
+//	public function toString():String{
+//		if(isZero()){
+//			return "0";
+//		}
+//
+//	}
 
 	public function isZero():Bool{
 		return val.sign == 0;
 	}
+
+//	public function isMinInt():Bool{
+//		return val.sign == -1 && val.bits.length == 1 && val.bits[0] == cast MIN_INT_32;
+//	}
 
 	public function isNeg():Bool{
 		return val.sign < 0;
@@ -102,10 +105,12 @@ abstract BigInt(_BigInt){
 //	@:op(--A) function _preDecrement():BigInt;
 //	@:op(A--) function _postDecrement():BigInt;
 
-//	@:op(A + B) static function add(a:BigInt, b:BigInt):BigInt{
-//		var res:BigInt = new BigInt();
-//		return res;
-//	}
+	@:op(A + B) static function add(a:BigInt, b:BigInt):BigInt{
+		var res:BigInt = new BigInt();
+		//TODO next
+
+		return res;
+	}
 
 //	@:op(A + B) @:commutative static function addInt(a:BigInt, b:Int):BigInt{
 //		var res:BigInt = new BigInt();
@@ -145,8 +150,6 @@ abstract BigInt(_BigInt){
 
 	@:op(A == B) static function eq(a:BigInt, b:BigInt):Bool{
 		if(a.isZero() && b.isZero()) return true;
-		if(a.val.bits == null && b.val.bits == null) return a.val.sign == b.val.sign;
-		if(a.val.bits == null && b.val.bits != null || a.val.bits != null && b.val.bits == null) return false;
 		if(a.val.sign != b.val.sign) return false;
 		if(a.val.bits.length != b.val.bits.length) return false;
 		for(i in 0...a.val.bits.length){
@@ -155,14 +158,7 @@ abstract BigInt(_BigInt){
 		return true;
 	}
 
-	@:op(A == B) @:commutative static function eqInt(a:BigInt, b:Int):Bool{
-		if(b == MIN_INT_32){
-			return a.val.sign == -1 && a.val.bits.length == 1 && a.val.bits[0] == cast MIN_INT_32;
-		}else{
-			return a.val.bits == null && a.val.sign == b;
-		}
-	}
-
+//	@:op(A == B) @:commutative static function eqInt(a:BigInt, b:Int):Bool
 //	@:op(A == B) @:commutative static function eqUInt(a:BigInt, b:UInt):Bool;
 //	@:op(A == B) @:commutative static function eqString(a:BigInt, b:String):Bool;
 
@@ -170,9 +166,7 @@ abstract BigInt(_BigInt){
 		return !(a == b);
 	}
 
-	@:op(A != B) @:commutative static function neqInt(a:BigInt, b:Int):Bool{
-		return !(a == b);
-	}
+//	@:op(A != B) @:commutative static function neqInt(a:BigInt, b:Int):Bool
 //	@:op(A != B) @:commutative static function neqUInt(a:BigInt, b:UInt):Bool;
 //	@:op(A != B) @:commutative static function neqString(a:BigInt, b:String):Bool;
 
