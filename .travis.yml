@@ -30,4 +30,4 @@ before_script:
 script:
   - ant clean
   - ant build
-  - haxelib run munit test -as3 -browser
+  - haxelib run munit test test.hxml -as3 -browser
