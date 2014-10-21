@@ -32,4 +32,4 @@ before_script:
 script:
   - ant clean
   - ant build
-  - haxelib run munit test test.hxml -as3 -norun -result-exit-code
+  - haxelib run munit test test.hxml -result-exit-code
