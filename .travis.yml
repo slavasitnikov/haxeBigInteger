@@ -33,4 +33,4 @@ script:
   - ant clean
   - ant build
   - haxelib run munit test test.hxml -as3 -norun
-  - haxelib run munit test -browser phantomjs
+#  - haxelib run munit test -browser phantomjs

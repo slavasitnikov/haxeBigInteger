@@ -53,6 +53,12 @@ class BigIntTest{
 //		Assert.isTrue(BigInt.fromInt(MIN_INT) == MIN_INT);
 //	}
 
+	@Test
+	public function errorTest():Void {
+		Assert.isTrue(false);
+	}
+
+
 	/**
 	*   @:op(A == B) static function eq(a:BigInt, b:BigInt):Bool;
 	**/
