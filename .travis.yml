@@ -13,18 +13,18 @@ install:
   - sudo apt-get install haxe -y --force-yes
   - sudo apt-get install ant -y --force-yes
   - mkdir ~/haxelib
-  - haxelib setup ~/haxelib
-  - haxelib install lime
-  - haxelib install lime-tools
-  - haxelib install openfl
-  - haxelib install hxcpp
-  - haxelib install format
-  - haxelib install svg
-  - haxelib install dox
-  - haxelib install mlib
-  - haxelib install mcover
-  - haxelib install hamcrest
-  - haxelib install munit
+  - haxelib setup ~/haxelib > /dev/null
+  - haxelib install lime > /dev/null
+  - haxelib install lime-tools > /dev/null
+  - haxelib install openfl > /dev/null
+  - haxelib install hxcpp > /dev/null
+  - haxelib install format > /dev/null
+  - haxelib install svg > /dev/null
+  - haxelib install dox > /dev/null
+  - haxelib install mlib > /dev/null
+  - haxelib install mcover > /dev/null
+  - haxelib install hamcrest > /dev/null
+  - haxelib install munit > /dev/null
 
 before_script:
   - cd $TRAVIS_BUILD_DIR/haxeBigInteger
