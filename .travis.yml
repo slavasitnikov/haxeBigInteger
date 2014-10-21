@@ -9,9 +9,9 @@ before_install:
   - sudo apt-get update
 
 install:
-#  - sudo apt-get install -qq flashplugin-installer
-  - sudo apt-get install haxe -y --force-yes
-  - sudo apt-get install ant -y --force-yes
+  - sudo apt-get install -qq flashplugin-installer -y --force-yes
+  - sudo apt-get install haxe -y --force-yes > /dev/null
+  - sudo apt-get install ant -y --force-yes > /dev/null
   - mkdir ~/haxelib
   - haxelib setup ~/haxelib > /dev/null
   - haxelib install lime > /dev/null
@@ -32,5 +32,4 @@ before_script:
 script:
   - ant clean
   - ant build
-  - haxelib run munit test test.hxml -as3 -norun
-#  - haxelib run munit test -browser phantomjs
+  - haxelib run munit test test.hxml -as3 -norun -result-exit-code
